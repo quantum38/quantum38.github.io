@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Your Name – Web Developer</title>
+<meta name="description" content="Web developer from Serbia building fast, reliable websites for small businesses.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* 1. Design tokens: change the look of the whole site from here */
+  :root {
+    --bg: #0e131b;
+    --surface: #151c27;
+    --border: #243044;
+    --ink: #e6eaf0;
+    --muted: #94a0b4;
+    --accent: #6f9bd6;
+    --accent-ink: #0b1018;
+    --radius: 8px;
+    --font: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--font); line-height: 1.65; font-size: 1rem; -webkit-font-smoothing: antialiased; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 0 24px; }
+
+  /* 2. Sticky header with a thin divider */
+  header { position: sticky; top: 0; z-index: 10; background: rgba(14,19,27,.88); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
+  header .wrap { display: flex; justify-content: space-between; align-items: center; height: 60px; }
+  header strong { font-weight: 600; letter-spacing: -0.01em; }
+  nav a { margin-left: 28px; color: var(--muted); font-size: .95rem; font-weight: 500; }
+  nav a:hover { color: var(--ink); text-decoration: none; }
+
+  /* 3. Hero: calm, left aligned, one load animation */
+  .hero { padding: 96px 0 80px; }
+  .availability { display: inline-flex; align-items: center; gap: 10px; color: var(--muted); font-size: .92rem; margin-bottom: 24px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: #4fbf8b; box-shadow: 0 0 8px 1px rgba(79,191,139,.7); animation: pulse 2s ease-out infinite; }
+  @keyframes pulse { 0% { box-shadow: 0 0 6px 1px rgba(79,191,139,.7), 0 0 0 0 rgba(79,191,139,.55); } 70%, 100% { box-shadow: 0 0 6px 1px rgba(79,191,139,.7), 0 0 0 10px rgba(79,191,139,0); } }
+  .hero h1 { font-size: clamp(2.1rem, 5vw, 3.4rem); line-height: 1.12; font-weight: 700; letter-spacing: -0.025em; max-width: 20ch; }
+  .hero p { margin-top: 20px; max-width: 56ch; font-size: 1.1rem; color: var(--muted); }
+  .hero-actions { margin-top: 36px; display: flex; flex-wrap: wrap; gap: 12px; }
+  .btn { display: inline-block; padding: 11px 22px; border-radius: var(--radius); font-weight: 600; font-size: .95rem; border: 1px solid var(--accent); transition: background .2s ease, border-color .2s ease; }
+  .btn:hover { text-decoration: none; }
+  .btn-primary { background: var(--accent); color: var(--accent-ink); }
+  .btn-primary:hover { background: #88b0e6; border-color: #88b0e6; }
+  .btn-secondary { color: var(--ink); border-color: var(--border); }
+  .btn-secondary:hover { border-color: var(--accent); }
+
+  @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+  .hero > * { animation: rise .7s ease both; }
+  .hero h1 { animation-delay: .1s; }
+  .hero p { animation-delay: .2s; }
+  .hero-actions { animation-delay: .3s; }
+
+  /* 4. Sections */
+  section { padding: 64px 0; border-top: 1px solid var(--border); }
+  h2 { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.015em; margin-bottom: 8px; }
+  .section-intro { color: var(--muted); max-width: 56ch; margin-bottom: 36px; }
+
+  .js .reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
+  .js .reveal.visible { opacity: 1; transform: none; }
+
+  /* Services: three columns that stack on phones */
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+  .service h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 6px; }
+  .service p { color: var(--muted); font-size: .96rem; }
+
+  /* Projects: bordered cards, subtle hover */
+  .project { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; transition: border-color .2s ease, transform .2s ease; }
+  .project:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .project h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; }
+  .project p { color: var(--muted); font-size: .95rem; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; list-style: none; padding: 0; }
+  .tags li { font-size: .8rem; padding: 2px 10px; border: 1px solid var(--border); border-radius: 999px; color: var(--muted); }
+  .links { margin-top: 16px; font-size: .92rem; font-weight: 500; }
+  .links a { margin-right: 18px; }
+
+  .about { max-width: 62ch; }
+  .about p + p { margin-top: 16px; }
+  .about p { color: var(--muted); }
+  .skills { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin-top: 28px; }
+  .skills li { font-size: .9rem; padding: 4px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; }
+
+  footer { padding: 64px 0 56px; border-top: 1px solid var(--border); }
+  footer p { color: var(--muted); margin-top: 8px; }
+  footer .hero-actions { margin-top: 24px; animation: none; }
+  .copy { margin-top: 48px; font-size: .85rem; color: var(--muted); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .js .reveal { opacity: 1; transform: none; }
+    html { scroll-behavior: auto; }
+  }
+  @media (max-width: 520px) { nav a { margin-left: 16px; } .hero { padding: 64px 0 56px; } }
+</style>
+<script>document.documentElement.classList.add("js");</script>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <strong>Your Name</strong>
+    <nav>
+      <a href="#services">Services</a>
+      <a href="#projects">Projects</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <div class="availability"><span class="dot"></span> Available for new projects</div>
+    <h1>Web developer building fast, reliable websites for small businesses.</h1>
+    <p>I design and build responsive websites with clean code, and I understand the network side too, from hosting and DNS to troubleshooting when something breaks.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#contact">Get in touch</a>
+      <a class="btn btn-secondary" href="#projects">View projects</a>
+    </div>
+  </div>
+
+  <section id="services" class="reveal">
+    <div class="wrap">
+      <h2>Services</h2>
+      <p class="section-intro">Small, well-defined projects with clear communication from start to finish.</p>
+      <div class="grid">
+        <div class="service">
+          <h3>Business websites</h3>
+          <p>Responsive landing pages and small business sites that work on every device and load quickly.</p>
+        </div>
+        <div class="service">
+          <h3>Design to code</h3>
+          <p>I turn Figma or PSD designs into clean, accurate HTML, CSS and JavaScript.</p>
+        </div>
+        <div class="service">
+          <h3>Fixes and automation</h3>
+          <p>Bug fixes, improvements to existing sites, and Python scripts that automate repetitive tasks.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects" class="reveal">
+    <div class="wrap">
+      <h2>Selected projects</h2>
+      <p class="section-intro">A few things I've built. Each one links to a live demo and the source code.</p>
+      <div class="grid">
+        <!-- Replace these three with your real projects. Copy/paste one article per project. -->
+        <article class="project">
+          <h3>Project one</h3>
+          <p>One or two sentences: what it is and what problem it solves.</p>
+          <ul class="tags"><li>HTML</li><li>CSS</li><li>JavaScript</li></ul>
+          <div class="links"><a href="#">Live demo</a><a href="#">Source code</a></div>
+        </article>
+        <article class="project">
+          <h3>Project two</h3>
+          <p>For example, a task manager with a Flask backend and a SQLite database.</p>
+          <ul class="tags"><li>Python</li><li>Flask</li><li>SQLite</li></ul>
+          <div class="links"><a href="#">Live demo</a><a href="#">Source code</a></div>
+        </article>
+        <article class="project">
+          <h3>Project three</h3>
+          <p>For example, a responsive website for a local business.</p>
+          <ul class="tags"><li>HTML</li><li>CSS</li><li>JavaScript</li></ul>
+          <div class="links"><a href="#">Live demo</a><a href="#">Source code</a></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="reveal">
+    <div class="wrap">
+      <h2>About</h2>
+      <div class="about">
+        <p>I'm a web developer from Serbia, currently studying Computer Network Administration at an electrical engineering high school. That background helps me build sites that are not only good looking but also well deployed and easy to maintain.</p>
+        <p>I use AI tools to work faster, and I review, test and understand everything I deliver.</p>
+      </div>
+      <ul class="skills">
+        <li>HTML</li><li>CSS</li><li>JavaScript</li><li>Python</li><li>C</li><li>Git &amp; GitHub</li><li>Computer networks</li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer id="contact" class="reveal">
+  <div class="wrap">
+    <h2>Contact</h2>
+    <p>Have a project in mind? Send a short description and I'll reply as soon as possible.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="mailto:your.email@example.com">your.email@example.com</a>
+      <a class="btn btn-secondary" href="https://github.com/your-username">GitHub</a>
+    </div>
+    <p class="copy">© 2026 Your Name</p>
+  </div>
+</footer>
+
+<script>
+  /* Adds "visible" when a section scrolls into view, which triggers the fade-in */
+  const items = document.querySelectorAll(".reveal");
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add("visible"); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    items.forEach((el) => io.observe(el));
+  } else {
+    items.forEach((el) => el.classList.add("visible"));
+  }
+</script>
+</body>
+</html>
